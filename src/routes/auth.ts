@@ -3,6 +3,10 @@ import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 import { body, validationResult } from 'express-validator';
 import User from '../models/User.js';
+import dotenv from 'dotenv';
+
+
+dotenv.config();
 
 const router = express.Router();
 
@@ -12,7 +16,7 @@ const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
     user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS, 
+    pass: process.env.EMAIL_PASS
   },
 });
 
