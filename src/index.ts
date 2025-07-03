@@ -6,7 +6,12 @@ import authRoutes from './routes/auth.js';
 import mongoose from 'mongoose';
 import noteRoutes from './routes/notes.js';
 
-const allowedOrigins = ['https://golden-squirrel-2b811d.netlify.app/', 'http://localhost:5174'];
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5174', // (if used locally)
+  process.env.CLIENT_URL,  // from .env (e.g., Netlify domain)
+  'https://your-site.netlify.app' // replace with actual Netlify URL
+];
 
 const PORT = process.env.PORT || 3003;
 
@@ -15,14 +20,23 @@ dotenv.config();
 const app = express();
 
 
-app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps or curl)
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    credentials: true,
+  })
+);
 app.use(express.json());
 
-app.use('/auth', authRoutes);
-app.use('/notes', noteRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/notes', noteRoutes);
 
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/hd-notes')
   .then(() => {
