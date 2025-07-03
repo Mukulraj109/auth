@@ -8,9 +8,9 @@ import noteRoutes from './routes/notes.js';
 
 const allowedOrigins = [
   'http://localhost:5173',
-  'http://localhost:5174', // (if used locally)
-  process.env.CLIENT_URL,  // from .env (e.g., Netlify domain)
-  'https://your-site.netlify.app' // replace with actual Netlify URL
+  'http://localhost:5174', 
+  process.env.CLIENT_URL, 
+  'https://golden-squirrel-2b811d.netlify.app/' 
 ];
 
 const PORT = process.env.PORT || 3003;
